@@ -23,7 +23,7 @@ public class MainActivity extends LifecycleActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		// reference views
 		TextView textView = (TextView) findViewById(R.id.textView);
 		Button button = (Button) findViewById(R.id.buttonLoad);
