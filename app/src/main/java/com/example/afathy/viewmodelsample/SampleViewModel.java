@@ -2,6 +2,9 @@ package com.example.afathy.viewmodelsample;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.util.Log;
 
 import io.reactivex.Single;
@@ -22,7 +25,7 @@ public class SampleViewModel extends android.arch.lifecycle.ViewModel {
 
 	private Disposable disposable;
 
-	public SampleViewModel() {
+	public SampleViewModel(SampleRepository repository) {
 		text = new MutableLiveData<>();
 		text.setValue("");
 
@@ -34,7 +37,7 @@ public class SampleViewModel extends android.arch.lifecycle.ViewModel {
 
 		error = new MutableLiveData<>();
 
-		this.repository = new SampleRepository(); // should be injected some way
+		this.repository = repository;
 		this.disposable = Disposables.disposed();
 	}
 
@@ -80,5 +83,19 @@ public class SampleViewModel extends android.arch.lifecycle.ViewModel {
 	@Override
 	protected void onCleared() {
 		disposable.dispose();
+	}
+
+	public static class Factory extends ViewModelProvider.NewInstanceFactory  {
+
+		private final SampleRepository repository;
+
+		public Factory(SampleRepository repository) {
+			this.repository = repository;
+		}
+
+		@Override
+		public <T extends ViewModel> T create(Class<T> modelClass) {
+			return (T) new SampleViewModel(repository);
+		}
 	}
 }

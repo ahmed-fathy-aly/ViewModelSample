@@ -23,16 +23,15 @@ public class MainActivity extends LifecycleActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-
-
+		
 		// reference views
 		TextView textView = (TextView) findViewById(R.id.textView);
 		Button button = (Button) findViewById(R.id.buttonLoad);
 		ProgressBar progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
 		// observe on the view model
-		SampleViewModel viewModel = ViewModelProviders.of(this).get(SampleViewModel.class);
+		SampleViewModel.Factory factory = new SampleViewModel.Factory(new SampleRepository());
+		SampleViewModel viewModel = ViewModelProviders.of(this, factory).get(SampleViewModel.class);
 		viewModel.getText().observe(this, text -> textView.setText((String) text));
 		viewModel.getLoading().observe(this, isLoading -> progressBar.setVisibility((Boolean) isLoading ? View.VISIBLE : View.INVISIBLE));
 		viewModel.getButtonEnabled().observe(this, enabled -> button.setEnabled((Boolean) enabled));
